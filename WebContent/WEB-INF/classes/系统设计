@@ -1,0 +1,20 @@
+1权限验证
+	1.1需求:		
+		某些时候，我们有可能猜出，或者是记住 比自己权限高的url地址
+		为了进一步提升系统访问的安全性，我们需要对这个用户是不是对某一个模块url请求有访问的权限
+	
+	1.2流程   
+			系统启动	查询权限表 cache-> Map<href, id> 
+				|
+			用户登录---fail
+				|	
+			success		查询role_model  ->cache session<"userModel", "modeId1&modeId2&modeId3&modeId4...">
+				|			
+			用户点击href
+				|
+			权限过滤器   cache取出 用户点击的href  对应的modeId   判断该modeId 在不在  "modeId1&modeId2&modeId3&modeId4..." 中
+				|
+			"modeId1&modeId2&modeId3&modeId4...".indexOf(modeId) ----- 小于0---对不起，您没有权限访问
+				|
+			> 0 可以访问
+			

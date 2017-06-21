@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bsy.business.model.dao.IModelDao">
+	<cache readOnly="true" size="5000"></cache>
+
+	<!-- 获取模块信息 -->
+	<select id="getModelInfo" resultType="Map" parameterType="Map">
+	select * from model m where 1=1
+		<if test="id != null"> and m.id = #{id}</if>
+	</select>
+	
+	<!-- 获取模块数量  -->
+	<select id="getModelCount" resultType="Long" parameterType="Map">
+	select count(*) count from model m where 1=1
+		<if test="id != null"> and m.id = #{id}</if>
+	</select>
+	
+	<!-- 根据用户id 查询该用户拥有的modelId -->
+	<select id="getModelIdByUser" resultType="Map" parameterType="String">
+    select r.model_id id from ( select role_id from user_info where id=#{id} ) t, 
+        role_model r 
+        where t.role_id = r.role_id
+    </select>
+</mapper>

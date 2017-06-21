@@ -1,0 +1,32 @@
+spring与springmvc整合
+
+springMVC
+	String 指定返回的视图页面名称，结合设置的返回地址路径加上页面名称后缀即可访问到。
+	注意：如果方法声明了注解@ResponseBody ，则会直接将返回值输出到页面。
+
+jsp页面中的js和css访问不到,因为走了springMVC的DispatcherServlet需要修改一下配置
+<servlet-mapping>
+    <servlet-name>default</servlet-name>
+    <url-pattern>/static/*</url-pattern>
+</servlet-mapping>
+
+
+
+mybatis
+1.对应返回值类型：
+	resultMap:结果集
+	resultType:int,string ,long ,class
+	
+login.jsp页面 display table样式混乱问题
+	按照常理，对于某一单元行需要显示时，使用：display:block属性，不需要显示时使用display:none属性 
+	但是有时候这样会造成样式混乱 例如table中的tr
+	解决办法
+	隐藏写成	display: ;  属性值我们不写 使用浏览器默认属性，就兼容了所有的浏览器
+	每个html标签都有自己的默认display属性的，你把display设置成空的时候，浏览器应该是把元素给成默认的属性了，所以就兼容了所有的浏览器！
+	
+login.jsp ajax函数内不能修改ajax外的变量
+	问题出现原因: 因为ajax默认是异步提交的
+	解决办法: 增加属性 async : false,  弊端:改为同步提交后,就失去的ajax异步的优点
+	
+<c:import>标签提供了所有<jsp:include>行为标签所具有的功能，同时也允许包含绝对URL。
+<%@ include file="/commonPage/top.jsp" %> 引入jsp

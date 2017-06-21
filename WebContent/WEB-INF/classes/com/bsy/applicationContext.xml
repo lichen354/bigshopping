@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:c="http://www.springframework.org/schema/c"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd">
+<!-- 注解扫描 -->
+<context:component-scan base-package="com.bsy.business"></context:component-scan>
+
+<!-- 数据源 -->
+	<!-- url配置的时候 &需要转换特殊字符  &amp; 就是 & 号  -->
+	<bean id="dataSource_bigshopping" class="org.apache.tomcat.jdbc.pool.DataSource" 
+		p:driverClassName="com.mysql.jdbc.Driver" 
+		p:url="jdbc:mysql://localhost:3306/bigshopping?useUnicode=true&amp;characterEncoding=UTF-8" 
+		p:username="root" 
+		p:password="" 
+		p:maxActive="20" 
+		p:maxIdle="10"
+		p:initialSize="10"
+		p:testWhileIdle="true"
+		p:validationQuery="select 1 from dual"></bean>
+
+	 <!--mybatis的SqlSession的工厂: SqlSessionFactoryBean dataSource:引用数据源-->
+	 <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean"
+	 p:dataSource-ref="dataSource_bigshopping"
+	 p:configLocation="classpath:com/bsy/mybatisConfig.xml"
+	 p:mapperLocations="classpath:com/bsy/business/**/mapper/*.xml"></bean>
+	 
+	<!-- spring与mybatis整合配置，扫描所有dao用于产生daoimpl对象 -->
+ 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer"
+       p:sqlSessionFactoryBeanName="sqlSessionFactory"
+       p:basePackage="com.bsy.business.*.dao"/>
+	 
+	 
+	<!-- 对数据源进行事务管理 -->
+  	<bean id="transactionManager"
+        class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
+        p:dataSource-ref="dataSource_bigshopping"/>
+</beans>
